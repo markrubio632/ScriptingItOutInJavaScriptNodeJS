@@ -1,6 +1,6 @@
 
 //this should export the whole class of User
-module.exports.User = class User {
+ class User {
 	constructor(userId, userName, userPass, userEmail, userRole){
 	this.userId = userId;
 	this.userName = userName;
@@ -49,6 +49,8 @@ module.exports.User = class User {
 		this.userRole = userRole;
 	}
 }
+const _User = User;
+export { _User as User };
 // example of EMSA 5 getters and seter
 // Object.defineProperty(User, userId, {get: function () {return userId;}});
 // Object.defineProperty(User, userId, {set: function () {return this.userId =

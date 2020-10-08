@@ -7,6 +7,7 @@
     "test": "echo \"Error: no test specified! Configure in package.json\" && exit 1"
   },
   "repository": "",
+  "type": "module",
   "keywords": [
     "node.js",
     "eclipse",
@@ -16,6 +17,7 @@
   "license": "MIT",
   "readmeFilename": "README.md",
   "dependencies": {
+    "esm": "^3.2.25",
     "mysql": "^2.18.1"
   }
 }
