@@ -41,21 +41,31 @@ function CreateTable() {
 function FindUserById(userId) {
 
 	//establishes a user object to be worked with
-	let userFound = new User();
+	var userFound = new User();
 
 	//finds and assigns the user object and its components
 	con.getConnection(function (err) {
 		if (err) throw err;
 		else {
-			userFound = con.query("SELECT * from User WHERE userId=?", [userId], function (err, result, fields) {
+			con.query("SELECT * from User WHERE userId=?", [userId], function (err, result) {
 				if (err) throw err;
-				console.log(result);
+				result.forEach((result) => {
+					userFound.userId = result.userId;
+					userFound.userName = result.userName;
+					userFound.userPass = result.userPass;
+					userFound.userEmail = result.userEmail;
+					userFound.userRole = result.userRole;
+
+					//console.log(`${result.userId}`);
+					//console.log(userFound);
+				})
 			});
 		}
-
 	});
-	//should return the user object post pulling from DB and return user when method is used
 	return userFound;
+	//console.log(userFound);
+	//should return the user object post pulling from DB and return user when method is used
+	//return userFound;
 
 }
 
@@ -81,12 +91,12 @@ function AddUser(userId, userName, userPass, userEmail, userRole) {
 //function to update the user in MySQL
 function UpdateUser(userName, userPass, userEmail, userRole, userId) {
 
-	let tempUser = new User();
+	//let tempUser = new User();
 
 	con.getConnection(function (err) {
 		if (err) throw err;
 		else {
-			tempUser = FindUserById(userId);
+			//tempUser = FindUserById(userId);
 			let updateUserSQL = "UPDATE User SET userName=?, userPass=?, userEmail=?, userRole=? WHERE userId=?"
 
 			con.query(updateUserSQL, [userName, userPass, userEmail, userRole, userId], function (err, result, rows, fields) {
@@ -106,11 +116,13 @@ function FindAllUserCount() {
 	con.getConnection(function (err) {
 		if (err) throw err;
 		else {
-			let findAll = "SELECT COUNT(userId) FROM User"
 
-			userCount = con.query(findAll, function (err) {
+			con.query("select Count(userId) as count from User", function (err, result) {
 				if (err) throw err;
-				console.log("Found Count!");
+				userCount = result.count;
+				result.forEach(result => {
+					console.log(`${result.count}`);
+				});
 			});
 		}
 	});
