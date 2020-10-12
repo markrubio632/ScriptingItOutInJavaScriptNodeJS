@@ -1,8 +1,6 @@
 
 //main page to handle functions
 
-//to run - node Functions.js ( when in the src directory)
-
 //IMPORTANT NOTES - 
 //had to run the command "npm install mysql" prior to importing create connection
 
@@ -22,16 +20,15 @@ const con = pkg.createPool({
 });
 
 //function to create a user table in MySQL
-function createTable() {
+function CreateTable() {
 	con.getConnection(function (err) {
 		if (err) throw err;
 		else {
-			console.log("connected!");
-			var createUserTable = "CREATE TABLE if not exists User(userId int auto_increment primary key, userName varchar(20), userPass varchar(20), userEmail varchar(30), userRole varchar(15))";
+			let createUserTable = "CREATE TABLE if not exists User(userId int auto_increment primary key, userName varchar(20), userPass varchar(20), userEmail varchar(30), userRole varchar(15))";
 			con.query(createUserTable, function (err) {
 				if (err) throw err;
 				else {
-					console.log("user table created!");
+					console.log("user table created or is created!");
 				}
 
 			});
@@ -41,16 +38,16 @@ function createTable() {
 }
 
 //function to find a specific user in MySQL
-function findUserById(userId) {
+function FindUserById(userId) {
 
 	//establishes a user object to be worked with
 	let userFound = new User();
 
 	//finds and assigns the user object and its components
-	con.connect(function (err) {
+	con.getConnection(function (err) {
 		if (err) throw err;
 		else {
-			userFound = con.query("SELECT * from User WHERE userId=?", function (err, result, fields) {
+			userFound = con.query("SELECT * from User WHERE userId=?", [userId], function (err, result, fields) {
 				if (err) throw err;
 				console.log(result);
 			});
@@ -70,13 +67,11 @@ function AddUser(userId, userName, userPass, userEmail, userRole) {
 	con.getConnection(function (err) {
 		if (err) throw err;
 		else {
-			console.log("connected!");
-
-			var newUserMySQL = "INSERT INTO User(userId, userName, userPass, userEmail, userRole) values (?,?,?,?,?)"
+			let newUserMySQL = "INSERT INTO User(userId, userName, userPass, userEmail, userRole) values (?,?,?,?,?)"
 
 			con.query(newUserMySQL, [newUserLocal.userId, newUserLocal.userName, newUserLocal.userPass, newUserLocal.userEmail, newUserLocal.userRole], function (err) {
 				if (err) throw err;
-				console.log('New User was inserted! New User Name is: ' + newUserLocal.userName);
+				console.log('New User was inserted!');
 			});
 		}
 
@@ -84,18 +79,17 @@ function AddUser(userId, userName, userPass, userEmail, userRole) {
 }
 
 //function to update the user in MySQL
-function updateUser(userId) {
+function UpdateUser(userName, userPass, userEmail, userRole, userId) {
 
 	let tempUser = new User();
 
-	con.connect(function (err) {
+	con.getConnection(function (err) {
 		if (err) throw err;
 		else {
-			console.log("connected!");
-			tempUser = findUserById(userId);
-			var updateUserSQL = "UPDATE User SET userName=?, userPass=?, userEmail=?, userRole=? WHERE userId=?"
+			tempUser = FindUserById(userId);
+			let updateUserSQL = "UPDATE User SET userName=?, userPass=?, userEmail=?, userRole=? WHERE userId=?"
 
-			con.query(updateUserSQL, [userName, userPass, userEmail, userRole, tempUser.userId], function (err, result, rows, fields) {
+			con.query(updateUserSQL, [userName, userPass, userEmail, userRole, userId], function (err, result, rows, fields) {
 				if (err) throw err;
 				console.log("User updated successfully!");
 			});
@@ -103,4 +97,26 @@ function updateUser(userId) {
 
 	});
 }
-export { AddUser, createTable, updateUser, findUserById };
+
+//returns a numerical value from the sql COUNT method
+function FindAllUserCount() {
+
+	var userCount;
+
+	con.getConnection(function (err) {
+		if (err) throw err;
+		else {
+			let findAll = "SELECT COUNT(userId) FROM User"
+
+			userCount = con.query(findAll, function (err) {
+				if (err) throw err;
+				console.log("Found Count!");
+			});
+		}
+	});
+
+	return userCount;
+
+}
+
+export { AddUser, CreateTable, UpdateUser, FindUserById, FindAllUserCount };
