@@ -19,8 +19,8 @@ console.log(myUser);
 
 UpdateUser('jeeves', 'anderson', 'anderson@gmail.com', 'loser', 1); */
 var myuser = new User();
-myuser = FindUserById(1);
-console.log(myuser);
+myuser = FindUserById(1).then(console.log(myuser));
+//console.log(myuser.userId);
 
 //List = ArrayPusher();
 /* List.forEach(element =>{

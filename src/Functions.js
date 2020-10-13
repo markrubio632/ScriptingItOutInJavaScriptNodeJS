@@ -37,35 +37,39 @@ function CreateTable() {
 	})
 }
 
-//function to find a specific user in MySQL
+//function to support FindByUserId() function
+function MainFinder(userId) {
+
+	const sql = "SELECT * FROM User where userId=?";
+
+	return new Promise(function (resolve, reject) {
+		var result = con.query(sql, [userId], (err, rows, fields) => {
+			if (err) {
+				reject(err);
+			}
+			else {
+				console.log("fetched user successfully");
+				resolve(rows);
+			}
+		})
+	})
+}
+
 function FindUserById(userId) {
 
-	//establishes a user object to be worked with
-	var userFound = new User();
-
-	//finds and assigns the user object and its components
-	con.getConnection(function (err) {
-		if (err) throw err;
-		else {
-			con.query("SELECT * from User WHERE userId=?", [userId], function (err, result) {
-				if (err) throw err;
-				result.forEach((result) => {
-					userFound.userId = result.userId;
-					userFound.userName = result.userName;
-					userFound.userPass = result.userPass;
-					userFound.userEmail = result.userEmail;
-					userFound.userRole = result.userRole;
-
-					//console.log(`${result.userId}`);
-					//console.log(userFound);
-				})
-			});
-		}
+	const result = MainFinder(userId).then(rows => {
+		//console.log(rows);
+		let user = new User();
+		user.userId = rows[0].userId;
+		user.userName = rows[0].userName;
+		user.userPass = rows[0].userPass;
+		user.userEmail = rows[0].userEmail;
+		user.userRole = rows[0].userRole;
+		//console.log(user);
+	}).catch(err => {
+		console.log(err);
 	});
-	return userFound;
-	//console.log(userFound);
-	//should return the user object post pulling from DB and return user when method is used
-	//return userFound;
+	return Promise.resolve(result);
 
 }
 
