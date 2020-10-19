@@ -3,26 +3,13 @@
 //to run - cd to the source file (Test.js is located in the source file)
 //node Test.js
 
-import { CreateTable, AddUser, FindUserById, UpdateUser } from '../src/Functions.js';
+import { CreateTable, AddUser, UpdateUser, ReturnUser } from '../src/Functions.js';
 import { User } from '../src/User.js';
-import { ArrayPusher } from "../src/Validation.js";
 
-var List = [];
 
-/* var testUser = new User(0, 'Mark', 'Rubio', 'jeeves@gmail.com', 'Admin');
+//update user example
+//UpdateUser('Beck', 'anderson', 'Beck@gmail.com', 'loser', 1);
 
-CreateTable();
-AddUser(testUser.userId, testUser.userName, testUser.userPass, testUser.userEmail, testUser.userRole);
-
-var myUser = FindUserById(1);
-console.log(myUser);
-
-UpdateUser('jeeves', 'anderson', 'anderson@gmail.com', 'loser', 1); */
+//example to search for a user. console write is in the promise
 var myuser = new User();
-myuser = FindUserById(1).then(console.log(myuser));
-//console.log(myuser.userId);
-
-//List = ArrayPusher();
-/* List.forEach(element =>{
-    console.log(element);
-}) */
+ReturnUser(1, myuser);

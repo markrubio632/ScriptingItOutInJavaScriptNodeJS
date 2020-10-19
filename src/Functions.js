@@ -9,6 +9,8 @@ import createPool from "mysql";
 
 const pkg = createPool;
 
+var user = new User();
+
 //establishes connection with MySQL
 const con = pkg.createPool({
 	host: '127.0.0.1',
@@ -37,40 +39,31 @@ function CreateTable() {
 	})
 }
 
-//function to support FindByUserId() function
-function MainFinder(userId) {
+//Finds User with the ID given
+async function ReturnUser(id, user) {
+	//create promise with resolve and reject as params
 
-	const sql = "SELECT * FROM User where userId=?";
+	let prom = new Promise((resolve, reject) => {
+		const sql = "SELECT * FROM User where userId=?";
 
-	return new Promise(function (resolve, reject) {
-		var result = con.query(sql, [userId], (err, rows, fields) => {
+		var r = con.query(sql, [id], (err, row) => {
 			if (err) {
 				reject(err);
 			}
 			else {
 				console.log("fetched user successfully");
-				resolve(rows);
+				user.userId = row[0].userId;
+				user.userName = row[0].userName;
+				user.userPass = row[0].userPass;
+				user.userEmail = row[0].userEmail;
+				user.userRole = row[0].userRole;
+				resolve(user);
 			}
 		})
 	})
-}
 
-function FindUserById(userId) {
-
-	const result = MainFinder(userId).then(rows => {
-		//console.log(rows);
-		let user = new User();
-		user.userId = rows[0].userId;
-		user.userName = rows[0].userName;
-		user.userPass = rows[0].userPass;
-		user.userEmail = rows[0].userEmail;
-		user.userRole = rows[0].userRole;
-		//console.log(user);
-	}).catch(err => {
-		console.log(err);
-	});
-	return Promise.resolve(result);
-
+	let result = await prom;
+	console.log(result);
 }
 
 //function to add a new user in MySQL
@@ -95,15 +88,12 @@ function AddUser(userId, userName, userPass, userEmail, userRole) {
 //function to update the user in MySQL
 function UpdateUser(userName, userPass, userEmail, userRole, userId) {
 
-	//let tempUser = new User();
-
 	con.getConnection(function (err) {
 		if (err) throw err;
 		else {
-			//tempUser = FindUserById(userId);
 			let updateUserSQL = "UPDATE User SET userName=?, userPass=?, userEmail=?, userRole=? WHERE userId=?"
 
-			con.query(updateUserSQL, [userName, userPass, userEmail, userRole, userId], function (err, result, rows, fields) {
+			con.query(updateUserSQL, [userName, userPass, userEmail, userRole, userId], function (err) {
 				if (err) throw err;
 				console.log("User updated successfully!");
 			});
@@ -135,4 +125,4 @@ function FindAllUserCount() {
 
 }
 
-export { AddUser, CreateTable, UpdateUser, FindUserById, FindAllUserCount };
+export { AddUser, CreateTable, UpdateUser, FindAllUserCount, ReturnUser };

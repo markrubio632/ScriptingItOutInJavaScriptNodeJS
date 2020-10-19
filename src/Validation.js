@@ -1,4 +1,4 @@
-//page to hold validation
+/* //page to hold validation
 
 import { FindAllUserCount, FindUserById } from "../src/Functions.js";
 import { User } from "./User.js";
@@ -20,4 +20,4 @@ function ArrayPusher() {
 
 }
 
-export { ArrayPusher };
+export { ArrayPusher }; */
