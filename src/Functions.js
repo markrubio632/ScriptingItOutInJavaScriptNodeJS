@@ -7,11 +7,11 @@
 import { User } from '../src/User.js';
 import createPool from "mysql";
 
-const pkg = createPool;
-
 var user = new User();
 
-//establishes connection with MySQL
+const pkg = createPool;
+
+//establishes connection with local MySQL
 const con = pkg.createPool({
 	host: '127.0.0.1',
 	user: 'root',
@@ -40,7 +40,8 @@ function CreateTable() {
 }
 
 //Finds User with the ID given
-async function ReturnUser(id, user) {
+async function ReturnUser(id) {
+	
 	//create promise with resolve and reject as params
 
 	let prom = new Promise((resolve, reject) => {
@@ -51,32 +52,34 @@ async function ReturnUser(id, user) {
 				reject(err);
 			}
 			else {
-				console.log("fetched user successfully");
+				//inserts the returned params into the user (user declared outside of method)
 				user.userId = row[0].userId;
 				user.userName = row[0].userName;
 				user.userPass = row[0].userPass;
 				user.userEmail = row[0].userEmail;
 				user.userRole = row[0].userRole;
+				console.log("fetched user successfully");
 				resolve(user);
 			}
 		})
 	})
 
 	let result = await prom;
-	console.log(result);
+	//console.log(result);
 }
 
 //function to add a new user in MySQL
-function AddUser(userId, userName, userPass, userEmail, userRole) {
+function AddUser(userName, userPass, userEmail, userRole) {
 
-	var newUserLocal = new User(userId, userName, userPass, userEmail, userRole);
+	//ID is 0 because the id in database is auto-incrementing
+	var newUserLocal = new User(0,userName, userPass, userEmail, userRole);
 
 	con.getConnection(function (err) {
 		if (err) throw err;
 		else {
-			let newUserMySQL = "INSERT INTO User(userId, userName, userPass, userEmail, userRole) values (?,?,?,?,?)"
+			let newUserMySQL = "INSERT INTO User(userName, userPass, userEmail, userRole) values (?,?,?,?)"
 
-			con.query(newUserMySQL, [newUserLocal.userId, newUserLocal.userName, newUserLocal.userPass, newUserLocal.userEmail, newUserLocal.userRole], function (err) {
+			con.query(newUserMySQL, [newUserLocal.userName, newUserLocal.userPass, newUserLocal.userEmail, newUserLocal.userRole], function (err) {
 				if (err) throw err;
 				console.log('New User was inserted!');
 			});
@@ -102,27 +105,19 @@ function UpdateUser(userName, userPass, userEmail, userRole, userId) {
 	});
 }
 
-//returns a numerical value from the sql COUNT method
-function FindAllUserCount() {
-
-	var userCount;
-
-	con.getConnection(function (err) {
+//deletes a user if the ID input exists
+function DeleteUser(userId){
+	con.getConnection(function (err){
+		let deletesql = "DELETE FROM User WHERE userId=?";
 		if (err) throw err;
-		else {
-
-			con.query("select Count(userId) as count from User", function (err, result) {
+		else{
+			con.query(deletesql, [userId], function (err, result){
 				if (err) throw err;
-				userCount = result.count;
-				result.forEach(result => {
-					console.log(`${result.count}`);
-				});
-			});
+				console.log("User Deleted");
+			})
 		}
-	});
-
-	return userCount;
-
+	})
 }
 
-export { AddUser, CreateTable, UpdateUser, FindAllUserCount, ReturnUser };
+//exports these functions for use elsewhere
+export { AddUser, CreateTable, UpdateUser, ReturnUser, DeleteUser };

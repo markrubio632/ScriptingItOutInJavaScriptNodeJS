@@ -1,5 +1,5 @@
 
-//this should export the whole class of User
+//this exports the whole class of User
  class User {
 	constructor(userId, userName, userPass, userEmail, userRole){
 	this.userId = userId;
