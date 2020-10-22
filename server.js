@@ -7,10 +7,17 @@ import { AddUser, DeleteUser, FindById, UpdateUser, FindAllUsers } from './src/D
 import bodyParser from 'body-parser';
 import { User } from './src/User.js';
 import { Login } from './src/Service.js';
+import cors from "cors";
 
 var con = express();
 
 con.use(bodyParser.json());
+con.use(cors(corsOptions));
+
+var corsOptions ={
+    origin: 'http://localhost:4200',
+    optionsSuccessStatus: 200
+}
 
 //Find a user
 con.get('/get', function (req, res) {
@@ -21,14 +28,15 @@ con.get('/get', function (req, res) {
     }).catch((err) => setImmediate(() => {throw err;})) */
 
     //finds all users
-    FindAllUsers().then(function (result) {
-        res.send(result);
-    }).catch((err) => setImmediate(() => { throw err; }));
+    /* FindAllUsers().then(function (result) {
+        res.json(result);
+    }).catch((err) => setImmediate(() => { throw err; })); */
 
-    
+    //THIS RETURNS BLANK ARRAY IN POSTMAN - REFINE FURTHER
+    res.json(FindAllUsers());
 })
 
-//Login
+//new user
 con.post('/post', function (req, res) {
     console.log('got a POST request');
     res.send(AddUser(req.body.userName, req.body.userPass, req.body.userEmail, req.body.userRole));

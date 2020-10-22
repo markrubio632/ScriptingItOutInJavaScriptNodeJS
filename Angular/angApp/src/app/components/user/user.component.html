@@ -1,16 +1,12 @@
-<div *ngFor="let user of user">
-    <ul>
-        <li>{{user.userName}}</li>
-    </ul>
-</div>
-<form>
-<div>UserName: <input type="text" name="userName"/><br>
-    PassWord: <input type="text" name="userPass"/><br>
-    Email: <input type="text" name="userEmail"/><br>
-    Role: <select name="userRole">
+<app-user *ngFor="let u of user">{{u |json }}</app-user>
+<form [formGroup]="userForm" (ngSubmit)="onSubmit()">
+<div>UserName: <input type="text" name="userName" id="userName" formControlName="userName"/><br>
+    PassWord: <input type="text" name="userPass" id="userPass" formControlName="userPass"/><br>
+    Email: <input type="text" name="userEmail" id="userEmail" formControlName="userEmail"/><br>
+    Role: <select name="userRole" id="userRole" formControlName="userRole">
         <option value="Admin">Admin</option>
         <option value="User">User</option>
     </select><br>
-    <button type="submit" onclick="FindUser()">Submit</button></div>
+    <button type="submit" class="button">Submit</button></div>
     </form>
 

@@ -6,6 +6,7 @@
 
 import { User } from '../src/User.js';
 import createPool from "mysql";
+import e from 'express';
 
 var user = new User();
 
@@ -68,7 +69,7 @@ async function FindById(id) {
 	//console.log(result);
 }
 
-async function FindAllUsers() {
+/* async function FindAllUsers() {
 
 	let userArray = [];
 
@@ -83,7 +84,7 @@ async function FindAllUsers() {
 					}
 					else {
 
-						for (let i = 0; i < row.length; i++){
+						for (let i = 0; i < row.length; i++) {
 							let myuser = new User();
 							myuser.userId = row[i].userId;
 							myuser.userName = row[i].userName;
@@ -101,6 +102,32 @@ async function FindAllUsers() {
 	})
 	let result = await prom;
 	//console.log(result);
+} */
+
+function FindAllUsers() {
+	let userArray = [];
+
+	con.getConnection(function (err) {
+		if (err) throw err;
+		else {
+			let findAll = "SELECT * FROM User";
+			con.query(findAll, function (err, row) {
+				if (err) throw err;
+				else {
+					for (let i = 0; i < row.length; i++) {
+						let myuser = new User();
+						myuser.userId = row[i].userId;
+						myuser.userName = row[i].userName;
+						myuser.userPass = row[i].userPass;
+						myuser.userEmail = row[i].userEmail;
+						myuser.userRole = row[i].userRole;
+						userArray.push(myuser);
+					}
+				}
+			});
+		}
+	})
+	return userArray;
 }
 
 //function to add a new user in MySQL
