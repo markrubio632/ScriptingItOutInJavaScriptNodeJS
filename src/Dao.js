@@ -40,8 +40,8 @@ function CreateTable() {
 }
 
 //Finds User with the ID given
-async function ReturnUser(id) {
-	
+async function FindById(id) {
+
 	//create promise with resolve and reject as params
 
 	let prom = new Promise((resolve, reject) => {
@@ -68,11 +68,46 @@ async function ReturnUser(id) {
 	//console.log(result);
 }
 
+async function FindAllUsers() {
+
+	let userArray = [];
+
+	let prom = new Promise((resolve, reject) => {
+		con.getConnection(function (err) {
+			if (err) throw err;
+			else {
+				let findAll = "SELECT * FROM User";
+				con.query(findAll, function (err, row) {
+					if (err) {
+						reject(err);
+					}
+					else {
+
+						for (let i = 0; i < row.length; i++){
+							let myuser = new User();
+							myuser.userId = row[i].userId;
+							myuser.userName = row[i].userName;
+							myuser.userPass = row[i].userPass;
+							myuser.userEmail = row[i].userEmail;
+							myuser.userRole = row[i].userRole;
+							userArray.push(myuser);
+						}
+						resolve(userArray);
+					}
+
+				})
+			}
+		})
+	})
+	let result = await prom;
+	//console.log(result);
+}
+
 //function to add a new user in MySQL
 function AddUser(userName, userPass, userEmail, userRole) {
 
 	//ID is 0 because the id in database is auto-incrementing
-	var newUserLocal = new User(0,userName, userPass, userEmail, userRole);
+	var newUserLocal = new User(0, userName, userPass, userEmail, userRole);
 
 	con.getConnection(function (err) {
 		if (err) throw err;
@@ -106,12 +141,12 @@ function UpdateUser(userName, userPass, userEmail, userRole, userId) {
 }
 
 //deletes a user if the ID input exists
-function DeleteUser(userId){
-	con.getConnection(function (err){
+function DeleteUser(userId) {
+	con.getConnection(function (err) {
 		let deletesql = "DELETE FROM User WHERE userId=?";
 		if (err) throw err;
-		else{
-			con.query(deletesql, [userId], function (err, result){
+		else {
+			con.query(deletesql, [userId], function (err, result) {
 				if (err) throw err;
 				console.log("User Deleted");
 			})
@@ -120,4 +155,4 @@ function DeleteUser(userId){
 }
 
 //exports these functions for use elsewhere
-export { AddUser, CreateTable, UpdateUser, ReturnUser, DeleteUser };
+export { AddUser, CreateTable, UpdateUser, FindById, DeleteUser, FindAllUsers };
