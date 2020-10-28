@@ -6,9 +6,9 @@
 
 import { User } from '../src/User.js';
 import createPool from "mysql";
-import e from 'express';
 
 var user = new User();
+var userArray = [];
 
 const pkg = createPool;
 
@@ -105,8 +105,7 @@ async function FindById(id) {
 } */
 
 function FindAllUsers() {
-	let userArray = [];
-
+	
 	con.getConnection(function (err) {
 		if (err) throw err;
 		else {
@@ -114,8 +113,9 @@ function FindAllUsers() {
 			con.query(findAll, function (err, row) {
 				if (err) throw err;
 				else {
+					
 					for (let i = 0; i < row.length; i++) {
-						let myuser = new User();
+						var myuser = new User();
 						myuser.userId = row[i].userId;
 						myuser.userName = row[i].userName;
 						myuser.userPass = row[i].userPass;
@@ -123,10 +123,13 @@ function FindAllUsers() {
 						myuser.userRole = row[i].userRole;
 						userArray.push(myuser);
 					}
+					//console.log(userArray);
+					return userArray;
 				}
 			});
+			return userArray;
 		}
-	})
+	});
 	return userArray;
 }
 

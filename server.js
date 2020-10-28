@@ -10,6 +10,7 @@ import { Login } from './src/Service.js';
 import cors from "cors";
 
 var con = express();
+var userArray = FindAllUsers();
 
 con.use(bodyParser.json());
 con.use(cors(corsOptions));
@@ -33,7 +34,9 @@ con.get('/get', function (req, res) {
     }).catch((err) => setImmediate(() => { throw err; })); */
 
     //THIS RETURNS BLANK ARRAY IN POSTMAN - REFINE FURTHER
-    res.json(FindAllUsers());
+    //var userArray = FindAllUsers();
+    //console.log(userArray);
+    res.json(userArray);
 })
 
 //new user

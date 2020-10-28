@@ -1,5 +1,4 @@
-import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { Component, OnInit, Input } from '@angular/core';
 import { UserService } from 'src/app/services/user.service';
 
 import { User } from '../../models/User';
@@ -11,44 +10,44 @@ import { User } from '../../models/User';
 })
 export class UserComponent implements OnInit {
 
-  user: User;
-  userForm = new FormGroup({
-      userName: new FormControl(''),
-      userPass: new FormControl(''),
-      userEmail: new FormControl(''),
-      userRole: new FormControl('')
-    })
-  constructor(private userService:UserService, private formBuilder:FormBuilder) { 
+  user: User[];
+  dUser:User;
+  data: any=[];
+  role:string;
+
+  constructor(private userService:UserService, ) { 
     
   }
 
   ngOnInit(): void {
-    this.FindUsers();
+    //this.FindUsers();
+    if(sessionStorage.getItem('user') != null){
+      console.log('User needs to login');
+    }
+    else {
+      this.GetUserInStorage('user');
+    }
+  }
+
+  GetUserInStorage(key){
+    console.log('received= key: ' + key);
+    this.data[key] = sessionStorage.getItem(key);
+    console.log(this.data);
   }
   
   FindUsers(){
-    this.userService.getUsers().subscribe(user =>{
+    this.userService.getAllUsers().subscribe(user =>{
       this.user = user;
-      
     });
   }
-
-  onSubmit(){
-     console.warn(this.userForm.value);
-     this.RegisterUser(this.userForm.get('userName'), this.userForm.get('userPass'), this.userForm.get('userEmail'), this.userForm.get('userRole'));
-     this.userForm.reset();
-  }
   
-
-  RegisterUser(userName, userPass, userEmail, userRole){
-    this.userService.registerUser(userName, userPass, userEmail, userRole).subscribe(user=>{
-      //this.user.userId = user.userId;
-      this.user.userName = user.userName;
-      this.user.userPass = user.userPass;
-      this.user.userEmail = user.userEmail;
-      this.user.userRole = user.userRole;
-    })
+  DeleteUser(userId){
+    
+    this.userService.deleteUser(userId).subscribe(dUser=>{
+      //this.dUser.userId = userId;
+      this.dUser = dUser;
+    });
+    this.FindUsers();
   }
-  
 
 }

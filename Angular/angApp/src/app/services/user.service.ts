@@ -3,7 +3,6 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 import { User } from "../models/User";
 import { Observable } from 'rxjs';
-import {  } from "rxjs/operators";
 
 const httpOptions = {
   headers: new HttpHeaders({
@@ -24,13 +23,31 @@ export class UserService {
 
   constructor(private http:HttpClient) { }
 
-  getUsers():Observable<User>{
-    return this.http.get<User>(`${this.userUrl}${this.userGetRequest}`, httpOptions);
+  getAllUsers():Observable<User[]>{
+    return this.http.get<User[]>(`${this.userUrl}${this.userGetRequest}`, httpOptions);
   }
 
-  registerUser(userName, userPass, userEmail, userRole):Observable<User>{
+  registerUser(user):Observable<User>{
     return this.http.post<User>(`${this.userUrl}${this.userPostRequest}`,
-    [userName, userPass, userEmail, userRole], httpOptions);
+    JSON.stringify(user), httpOptions);
+  }
+
+  deleteUser(userId):Observable<any>{
+
+    const options = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json'
+      }),
+      body: {
+        userId: userId
+      }
+    }
+
+    return this.http.delete<any>(`${this.userUrl}${this.userDeleteRequest}`, options);
+  }
+
+  updateUser(user):Observable<User>{
+    return this.http.put<User>(`${this.userUrl}${this.userPutRequest}`, user, httpOptions);
   }
 
 }
