@@ -7,9 +7,16 @@ import { Component, OnInit } from '@angular/core';
 })
 export class HeaderComponent implements OnInit {
 
+  isLogged:string = sessionStorage.getItem('isLogged');
+
   constructor() { }
 
   ngOnInit(): void {
+  }
+
+  Logout(){
+      sessionStorage.clear();
+    window.location.reload();
   }
 
 }

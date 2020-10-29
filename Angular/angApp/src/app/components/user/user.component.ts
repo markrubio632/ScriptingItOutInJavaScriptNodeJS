@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { UserService } from 'src/app/services/user.service';
 
 import { User } from '../../models/User';
@@ -14,14 +14,18 @@ export class UserComponent implements OnInit {
   dUser:User;
   data: any=[];
   role:string;
+  show:boolean;
+
+  @Output() open: EventEmitter<any> = new EventEmitter();
+  @Output() close: EventEmitter<any> = new EventEmitter();
 
   constructor(private userService:UserService, ) { 
     
   }
 
   ngOnInit(): void {
-    //this.FindUsers();
-    if(sessionStorage.getItem('user') != null){
+    this.FindUsers();
+    if(sessionStorage.getItem('user') == null){
       console.log('User needs to login');
     }
     else {
@@ -29,10 +33,20 @@ export class UserComponent implements OnInit {
     }
   }
 
+  onToggle(){
+    this.show = !this.show;
+    if(this.show){
+      this.open.emit(null);
+    }
+    else{
+      this.close.emit(null);
+    }
+  }
+
   GetUserInStorage(key){
-    console.log('received= key: ' + key);
+    //console.log('received= key: ' + key);
     this.data[key] = sessionStorage.getItem(key);
-    console.log(this.data);
+    //console.log(this.data);
   }
   
   FindUsers(){
