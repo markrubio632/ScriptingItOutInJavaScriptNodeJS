@@ -3,10 +3,8 @@
 //modules installed - nodemon, express, body-parser, cookie-parser, multer 
 
 import express from 'express';
-import { AddUser, DeleteUser, FindById, UpdateUser, FindAllUsers } from './src/Dao.js';
+import { AddUser, DeleteUser, UpdateUser, FindAllUsers } from './src/Dao.js';
 import bodyParser from 'body-parser';
-import { User } from './src/User.js';
-import { Login } from './src/Service.js';
 import cors from "cors";
 
 var con = express();
@@ -23,19 +21,6 @@ var corsOptions ={
 //Find a user
 con.get('/get', function (req, res) {
     console.log("got a GET request");
-    //finds a single user
-    /* FindById(req.body.id).then(function (user){
-        res.send(user);
-    }).catch((err) => setImmediate(() => {throw err;})) */
-
-    //finds all users
-    /* FindAllUsers().then(function (result) {
-        res.json(result);
-    }).catch((err) => setImmediate(() => { throw err; })); */
-
-    //THIS RETURNS BLANK ARRAY IN POSTMAN - REFINE FURTHER
-    //var userArray = FindAllUsers();
-    //console.log(userArray);
     res.json(userArray);
 })
 

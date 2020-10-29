@@ -1,9 +1,6 @@
 
 //main page to handle functions
 
-//IMPORTANT NOTES - 
-//had to run the command "npm install mysql" prior to importing create connection
-
 import { User } from '../src/User.js';
 import createPool from "mysql";
 
@@ -40,69 +37,6 @@ function CreateTable() {
 	})
 }
 
-//Finds User with the ID given
-async function FindById(id) {
-
-	//create promise with resolve and reject as params
-
-	let prom = new Promise((resolve, reject) => {
-		const sql = "SELECT * FROM User where userId=?";
-
-		var r = con.query(sql, [id], (err, row) => {
-			if (err) {
-				reject(err);
-			}
-			else {
-				//inserts the returned params into the user (user declared outside of method)
-				user.userId = row[0].userId;
-				user.userName = row[0].userName;
-				user.userPass = row[0].userPass;
-				user.userEmail = row[0].userEmail;
-				user.userRole = row[0].userRole;
-				console.log("fetched user successfully");
-				resolve(user);
-			}
-		})
-	})
-
-	let result = await prom;
-	//console.log(result);
-}
-
-/* async function FindAllUsers() {
-
-	let userArray = [];
-
-	let prom = new Promise((resolve, reject) => {
-		con.getConnection(function (err) {
-			if (err) throw err;
-			else {
-				let findAll = "SELECT * FROM User";
-				con.query(findAll, function (err, row) {
-					if (err) {
-						reject(err);
-					}
-					else {
-
-						for (let i = 0; i < row.length; i++) {
-							let myuser = new User();
-							myuser.userId = row[i].userId;
-							myuser.userName = row[i].userName;
-							myuser.userPass = row[i].userPass;
-							myuser.userEmail = row[i].userEmail;
-							myuser.userRole = row[i].userRole;
-							userArray.push(myuser);
-						}
-						resolve(userArray);
-					}
-
-				})
-			}
-		})
-	})
-	let result = await prom;
-	//console.log(result);
-} */
 
 function FindAllUsers() {
 	
@@ -185,4 +119,4 @@ function DeleteUser(userId) {
 }
 
 //exports these functions for use elsewhere
-export { AddUser, CreateTable, UpdateUser, FindById, DeleteUser, FindAllUsers };
+export { AddUser, CreateTable, UpdateUser, DeleteUser, FindAllUsers };
