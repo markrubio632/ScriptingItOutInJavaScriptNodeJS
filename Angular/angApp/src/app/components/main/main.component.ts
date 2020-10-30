@@ -25,9 +25,6 @@ export class MainComponent implements OnInit {
       this.user = JSON.parse(sessionStorage.getItem('user'));
       console.log(this.user);
     }
-    else{
-      console.log("this aint it");
-    }
   }
 
 }

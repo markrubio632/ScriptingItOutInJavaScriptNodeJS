@@ -1,18 +1,18 @@
 <header class="header" *ngIf="isLoggedAdmin">
     <h1>Welcome Admin!</h1>
     <button (click)="Logout()">Logout</button>
-    <button (click)="Registration()">Register</button>
-    <button (click)="Home()">Home</button>
+    <button (click)="Register()">Register</button>
+    <button (click)="Home()">HomeWIP</button>
 </header>
 <header class="header" *ngIf="isLoggedUser">
     <h1>Welcome User!</h1>
     <button (click)="Logout()">Logout</button>
-    <button (click)="Registration()">Register</button>
-    <button (click)="Home()">Home</button>
+    <button (click)="Register()">Register</button>
+    <button (click)="Home()">HomeWIP</button>
 </header>
 <header class="header" *ngIf="isNotLogged">
     <h1>Welcome!</h1>
     <button (click)="Login()">Login</button>
-    <button (click)="Registration()">Register</button>
-    <button (click)="Home()">Home</button>
+    <button (click)="Register()">Register</button>
+    <button (click)="Home()">HomeWIP</button>
 </header>

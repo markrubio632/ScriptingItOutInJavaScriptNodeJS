@@ -13,11 +13,13 @@ export class UserComponent implements OnInit {
   user: User[];
   dUser:User;
   data: any=[];
+  isMyUser:boolean = false;
   userShow:boolean; //used in toggle for show users button
   regiShow:boolean; //used in toggle for add new user button
   updaShow:boolean; //used in troggle for update user button
 
-  isAdmin = (sessionStorage.getItem('isAdmin') === 'Admin');
+  isAdmin:boolean = (sessionStorage.getItem('isAdmin') === 'Admin');
+  //updateButtonCondition:boolean = (this.isMyUser === true && this.isAdmin === true);
 
   @Output() open: EventEmitter<any> = new EventEmitter();
   @Output() close: EventEmitter<any> = new EventEmitter();
@@ -39,6 +41,7 @@ export class UserComponent implements OnInit {
 
   OnToggleShowUsers(){
     this.userShow = !this.userShow;
+    this.GetMyUpdateButton();
     if(this.userShow){
       this.open.emit(null);
     }
@@ -54,6 +57,14 @@ export class UserComponent implements OnInit {
     }
     else{
       this.close.emit(null);
+    }
+  }
+
+  GetMyUpdateButton(){
+    for(let i = 0; i < this.user.length; i++){
+      if(this.dUser.userId === this.user[i].userId){
+        this.isMyUser = true;
+      }
     }
   }
 

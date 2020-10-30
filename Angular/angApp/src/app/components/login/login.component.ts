@@ -29,9 +29,8 @@ export class LoginComponent implements OnInit {
 
   onSubmit(){
     console.warn(this.userForm.value);
-    this.Login(this.userForm.get('userName').value, this.userForm.get('userPass').value); //session storage is in Login()
+    this.Login(this.userForm.get('userName').value, this.userForm.get('userPass').value);
     window.location.reload();
-    //this.userForm.reset();
  }
 
   SaveUserInStorage(key, val){
@@ -46,8 +45,8 @@ export class LoginComponent implements OnInit {
     this.userService.getAllUsers().subscribe(user =>{
       this.user = user;
       for(let i = 0; i < user.length; i++){
+        //acts as the login mechanism
         if(this.user[i].userName === userName && this.user[i].userPass === userPass){
-          //this.myuser = this.user[i]; - should be the same 
           this.SaveUserInStorage('user', this.user[i]);
           sessionStorage.setItem('isAdmin', this.user[i].userRole);
           sessionStorage.setItem('isLogged', 'true');
