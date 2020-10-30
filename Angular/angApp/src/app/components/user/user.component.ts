@@ -13,13 +13,16 @@ export class UserComponent implements OnInit {
   user: User[];
   dUser:User;
   data: any=[];
-  role:string;
-  show:boolean;
+  userShow:boolean; //used in toggle for show users button
+  regiShow:boolean; //used in toggle for add new user button
+  updaShow:boolean; //used in troggle for update user button
+
+  isAdmin = (sessionStorage.getItem('isAdmin') === 'Admin');
 
   @Output() open: EventEmitter<any> = new EventEmitter();
   @Output() close: EventEmitter<any> = new EventEmitter();
 
-  constructor(private userService:UserService, ) { 
+  constructor(private userService:UserService ) { 
     
   }
 
@@ -30,12 +33,33 @@ export class UserComponent implements OnInit {
     }
     else {
       this.GetUserInStorage('user');
+      this.FindSoloUser();
     }
   }
 
-  onToggle(){
-    this.show = !this.show;
-    if(this.show){
+  OnToggleShowUsers(){
+    this.userShow = !this.userShow;
+    if(this.userShow){
+      this.open.emit(null);
+    }
+    else{
+      this.close.emit(null);
+    }
+  }
+
+  OnToggleAddUsers(){
+    this.regiShow = !this.regiShow;
+    if(this.regiShow){
+      this.open.emit(null);
+    }
+    else{
+      this.close.emit(null);
+    }
+  }
+
+  OnToggleUpdateUsers(){
+    this.updaShow = !this.updaShow;
+    if(this.updaShow){
       this.open.emit(null);
     }
     else{
@@ -44,9 +68,7 @@ export class UserComponent implements OnInit {
   }
 
   GetUserInStorage(key){
-    //console.log('received= key: ' + key);
     this.data[key] = sessionStorage.getItem(key);
-    //console.log(this.data);
   }
   
   FindUsers(){
@@ -54,11 +76,23 @@ export class UserComponent implements OnInit {
       this.user = user;
     });
   }
+
+  FindSoloUser(){
+    this.dUser = JSON.parse(sessionStorage.getItem('user'));
+  }
+
+  UpdateUserRedirect(){
+    sessionStorage.setItem('logger', 'Update');
+    window.location.reload();
+  }
+
+  AddUserRedirect(){
+    sessionStorage.setItem('logger', 'Register');
+    window.location.reload();
+  }
   
   DeleteUser(userId){
-    
     this.userService.deleteUser(userId).subscribe(dUser=>{
-      //this.dUser.userId = userId;
       this.dUser = dUser;
     });
     this.FindUsers();

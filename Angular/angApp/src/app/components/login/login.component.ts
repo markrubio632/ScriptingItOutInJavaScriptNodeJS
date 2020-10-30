@@ -49,6 +49,7 @@ export class LoginComponent implements OnInit {
         if(this.user[i].userName === userName && this.user[i].userPass === userPass){
           //this.myuser = this.user[i]; - should be the same 
           this.SaveUserInStorage('user', this.user[i]);
+          sessionStorage.setItem('isAdmin', this.user[i].userRole);
           sessionStorage.setItem('isLogged', 'true');
           //sessionStorage.setItem('logger', 'users');
         }

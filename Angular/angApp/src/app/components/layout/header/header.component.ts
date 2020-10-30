@@ -8,6 +8,12 @@ import { Component, OnInit } from '@angular/core';
 export class HeaderComponent implements OnInit {
 
   isLogged:string = sessionStorage.getItem('isLogged');
+  isAdmin:string = sessionStorage.getItem('isAdmin');
+
+  isLoggedAdmin:boolean = (this.isAdmin === 'Admin' && this.isLogged !== null);
+  isLoggedUser:boolean = (this.isAdmin !== 'Admin' && this.isLogged !== null);
+  isNotLogged:boolean = (this.isLogged === null);
+
 
   constructor() { }
 

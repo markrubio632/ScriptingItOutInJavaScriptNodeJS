@@ -12,10 +12,10 @@ export class MainComponent implements OnInit {
   
   isLogged:string = sessionStorage.getItem('isLogged');
   loginCondition:boolean = (this.isLogged === null && sessionStorage.getItem('logger') === 'Login');
+  registerCondition:boolean = (sessionStorage.getItem('logger') === 'Register');
 
   constructor() { 
     sessionStorage.setItem('logger', 'Login');
-    console.log(sessionStorage.getItem('logger'));
   }
 
   ngOnInit(): void {

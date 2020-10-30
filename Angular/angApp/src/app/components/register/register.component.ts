@@ -10,7 +10,7 @@ import { User } from "../../models/User";
 })
 export class RegisterComponent implements OnInit {
 
-  user:User;
+  user: User;
 
   userForm = new FormGroup({
     userName: new FormControl(),
@@ -19,29 +19,28 @@ export class RegisterComponent implements OnInit {
     userRole: new FormControl()
   })
 
-  constructor(private userService:UserService, private formBuilder:FormBuilder) { }
+  constructor(private userService: UserService) { }
 
   ngOnInit(): void {
   }
 
-  onSubmit(){
+  onSubmit() {
     console.warn(this.userForm.value);
-    this.RegisterUser(this.userForm.get('userName').value, this.userForm.get('userPass').value, 
-    this.userForm.get('userEmail').value, this.userForm.get('userRole').value); 
+    this.RegisterUser(this.userForm.get('userName').value, this.userForm.get('userPass').value,
+      this.userForm.get('userEmail').value, this.userForm.get('userRole').value);
+      console.log("User was submitted successfully");
     this.userForm.reset();
- }
+  }
 
-  RegisterUser(userName, userPass, userEmail, userRole){
+  RegisterUser(userName, userPass, userEmail, userRole) {
     let myuser = new User();
     myuser.userName = userName;
     myuser.userPass = userPass;
     myuser.userEmail = userEmail;
     myuser.userRole = userRole;
 
-    this.userService.registerUser(myuser).subscribe(user=>{
-    
+    this.userService.registerUser(myuser).subscribe(user => {
       user = myuser;
-
     })
   }
 

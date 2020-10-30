@@ -11,6 +11,7 @@ import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 export class UpdateComponent implements OnInit {
 
   user:User;
+  storedUser = JSON.parse(sessionStorage.getItem('user'));
 
   constructor(private userService:UserService) { }
 
@@ -26,17 +27,21 @@ export class UpdateComponent implements OnInit {
   onSubmit(){
     console.warn(this.userForm.value);
     this.Update(this.userForm.get('userName').value, this.userForm.get('userPass').value, 
-    this.userForm.get('userEmail').value, this.userForm.get('userRole').value);
-    this.userForm.reset();
+    this.userForm.get('userEmail').value);
+    console.log("update was successful");
+    sessionStorage.setItem('user', JSON.stringify(this.user));
+    window.location.reload();
   }
 
-  Update(userName, userPass, userEmail, userRole){
+  Update(userName, userPass, userEmail){
 
     let myuser = new User();
     myuser.userName = userName;
     myuser.userPass = userPass;
     myuser.userEmail = userEmail;
-    myuser.userRole = userRole;
+    myuser.userRole = this.storedUser.userRole;
+    myuser.userId = this.storedUser.userId;
+    this.user = myuser;
 
     this.userService.updateUser(myuser).subscribe(user=>{
       user = myuser;
