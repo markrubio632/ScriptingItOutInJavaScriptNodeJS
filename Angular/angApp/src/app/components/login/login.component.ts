@@ -30,15 +30,12 @@ export class LoginComponent implements OnInit {
   onSubmit(){
     console.warn(this.userForm.value);
     this.Login(this.userForm.get('userName').value, this.userForm.get('userPass').value); //session storage is in Login()
-    sessionStorage.setItem('isLogged', 'true');
     window.location.reload();
     //this.userForm.reset();
  }
 
   SaveUserInStorage(key, val){
-    sessionStorage.setItem(key, val);
-    localStorage.setItem(key, val);
-    //this.data[key] = sessionStorage.getItem(key);
+    sessionStorage.setItem(key, JSON.stringify(val));
   }
 
   GetUserInStorage(key){
@@ -52,6 +49,8 @@ export class LoginComponent implements OnInit {
         if(this.user[i].userName === userName && this.user[i].userPass === userPass){
           //this.myuser = this.user[i]; - should be the same 
           this.SaveUserInStorage('user', this.user[i]);
+          sessionStorage.setItem('isLogged', 'true');
+          //sessionStorage.setItem('logger', 'users');
         }
       }
     });
