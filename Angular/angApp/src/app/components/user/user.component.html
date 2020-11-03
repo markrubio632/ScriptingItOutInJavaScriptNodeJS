@@ -39,12 +39,14 @@
             <thead>
                 <tr>
                     <th scope="col">UserID</th>
+                    <th scope="col">UserName</th>
                     <th scope="col">UserEmail</th>
                 </tr>
             </thead>
             <tbody>
                 <tr>
                     <th>{{this.dUser.userId}}</th>
+                    <td>{{this.dUser.userName}}</td>
                     <td>{{this.dUser.userEmail}}</td>
                     <td><button type="button" class="btn btn-danger" data-toggle="button" aria-pressed="false" (click)="DeleteUser(user.userId)">Delete My Account</button></td>
                     <td><button type="button" class="btn btn-primary" data-toggle="button" aria-pressed="false" (click)="OnToggleUpdateUsers()">Update My Account</button></td>
